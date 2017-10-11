@@ -60,7 +60,7 @@ bool Hash::Search(int key, int& _bucket, int& _pos) {
 		pos = 0;
 		list<int> temp = table.at(i);
 		while (!temp.empty()){
-			if (temp.front() == key){
+			if (temp.front() == key && found != true){
 				found = true;
 				_bucket = i;
 				_pos = pos;
@@ -77,23 +77,17 @@ bool Hash::Search(int key, int& _bucket, int& _pos) {
 }
 
 void Hash::Print() {
-	list<int> temp;
 	for (int i = 0; i < table.size(); i++){
+		list<int> temp = table.at(i);
 		cout << i << " : ";
 		int size = table.at(i).size();
-		int j = 0;
-		while (!table.at(i).empty()){
-			cout << table.at(i).front();
-			temp.push_front(table.at(i).front());
-			table.at(i).pop_front();
-			if (!table.at(i).empty())
+		while (!temp.empty()){
+			cout << temp.front();
+			temp.pop_front();
+			if (!temp.empty())
 				cout << "->";
 		}
 		cout << endl;
-		while (!temp.empty()){
-			table.at(i).push_front(temp.front());
-			temp.pop_front();
-		}
 		temp.clear();
 	}
 }
