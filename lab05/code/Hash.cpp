@@ -19,7 +19,7 @@ Hash::Hash(int _bNo) {
  * DESTRUCTOR
  ****************************************************************/
 Hash::~Hash() {
-  table.clear();
+	table.clear();
 }
 
 void Hash::Insert(int toInsert) {
@@ -29,51 +29,46 @@ void Hash::Insert(int toInsert) {
 }
 
 bool Hash::Delete(int toDelete) {
-	list<int> temp;
-	bool deleted = false;
+	int deleted = 0;
 	int size = 0;
 	for (int i = 0; i < table.size(); i++){
+		list<int> temp;
 		while (!table.at(i).empty()){
-			if (table.at(i).front() != toDelete){
-				temp.push_front(table.at(i).front());
+			if (table.at(i).front() != toDelete || (deleted == 1)){
+				temp.push_back(table.at(i).front());
 				table.at(i).pop_front();
 			}
-			else if (table.at(i).front() == toDelete){
-				deleted = true;
+			else if ((table.at(i).front() == toDelete) && (deleted != 1)){
+				deleted = 1;
 				table.at(i).pop_front();
 			}
 		}
-		while (!temp.empty()){
-			table.at(i).push_front(temp.front());
-			temp.pop_front();
-		}
+		table.at(i) = temp;
+		temp.clear();
 	}
-	if (deleted == true)
+	if (deleted == 1)
 		return true;
 	else
 		return false;
 }
 
 bool Hash::Search(int key, int& _bucket, int& _pos) {
-	list<int> temp;
 	bool found = false;
 	int pos = 0;
 	int size = 0;
 	for (int i = 0; i < table.size(); i++){
-		pos = 0
-		while (!table.at(i).empty()){
-			if (table.at(i).front() == key){
+		pos = 0;
+		list<int> temp = table.at(i);
+		while (!temp.empty()){
+			if (temp.front() == key){
 				found = true;
 				_bucket = i;
 				_pos = pos;
 			}
-			temp.push_front(table.at(i).front());
-			table.at(i).pop_front();
-		}
-		while (!temp.empty()){
-			table.at(i).push_front(temp.front());
+			pos++;
 			temp.pop_front();
 		}
+		temp.clear();
 	}
 	if (found == true)
 		return true;
@@ -85,18 +80,21 @@ void Hash::Print() {
 	list<int> temp;
 	for (int i = 0; i < table.size(); i++){
 		cout << i << " : ";
+		int size = table.at(i).size();
+		int j = 0;
 		while (!table.at(i).empty()){
-			if (i < (table.size()-1))
-				cout << table.at(i).front() << "->";
-			else if (i == (table.size()-1))
-				cout << table.at(i).front() << endl;
+			cout << table.at(i).front();
 			temp.push_front(table.at(i).front());
 			table.at(i).pop_front();
+			if (!table.at(i).empty())
+				cout << "->";
 		}
+		cout << endl;
 		while (!temp.empty()){
 			table.at(i).push_front(temp.front());
 			temp.pop_front();
 		}
+		temp.clear();
 	}
 }
 
